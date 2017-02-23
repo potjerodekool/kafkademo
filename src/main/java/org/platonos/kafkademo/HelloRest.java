@@ -19,7 +19,6 @@ public class HelloRest {
     @Produces(MediaType.APPLICATION_JSON)
     public String hello() {
         eventProducer.publish(new CoffeeEvent("black"));
-        System.out.println("return to user");
         return "hello: wildfly swarm + gradle + java + Coffie";
     }
 

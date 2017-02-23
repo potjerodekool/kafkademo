@@ -1,4 +1,7 @@
-package org.platonos.kafkademo;
+package org.platonos.kafkademo.serialization;
+
+import org.platonos.kafkademo.CoffeeEvent;
+import org.platonos.kafkademo.LoggerProducer;
 
 import javax.json.bind.serializer.JsonbSerializer;
 import javax.json.bind.serializer.SerializationContext;

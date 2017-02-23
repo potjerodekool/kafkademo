@@ -1,7 +1,8 @@
-package org.platonos.kafkademo;
+package org.platonos.kafkademo.serialization;
 
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Deserializer;
+import org.platonos.kafkademo.CoffeeEvent;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -31,7 +32,7 @@ public class EventDeserializer implements Deserializer<CoffeeEvent> {
                 final Class<? extends CoffeeEvent> eventClass = (Class<? extends CoffeeEvent>) Class.forName(jsonObject.getString("class"));
                 return eventClass.getConstructor(JsonObject.class).newInstance(jsonObject.getJsonObject("data"));
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.severe("Could not deserialize event: " + e.getMessage());
             throw new SerializationException("Could not deserialize event", e);
         }

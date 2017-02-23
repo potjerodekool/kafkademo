@@ -1,0 +1,5 @@
+.idea/
+build/
+src/main/groovy/
+src/test/
+target/

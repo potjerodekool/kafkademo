@@ -1,6 +1,9 @@
-package org.platonos.kafkademo;
+package org.platonos.kafkademo.serialization;
 
 import org.apache.kafka.common.serialization.Serializer;
+import org.platonos.kafkademo.CoffeeEvent;
+import org.platonos.kafkademo.LoggerProducer;
+import org.platonos.kafkademo.serialization.EventJsonbSerializer;
 
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
@@ -25,7 +28,6 @@ public class EventSerializer implements Serializer<CoffeeEvent> {
             return null;
 
         final JsonbConfig config = new JsonbConfig()
-                //.withAdapters(new UUIDAdapter())
                 .withSerializers(new EventJsonbSerializer());
 
         try (final Jsonb jsonb = JsonbBuilder.create(config)) {
