@@ -1,6 +1,9 @@
 package org.platonos.kafkademo;
 
 import org.apache.kafka.clients.producer.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -10,16 +13,19 @@ import java.util.Properties;
 import java.util.concurrent.Future;
 import java.util.logging.Logger;
 
-@ApplicationScoped
+@Service
 public class EventProducer {
 
     private Producer<String, CoffeeEvent> producer;
 
-    @Inject
+    @Autowired
+    @Qualifier("kafkaProperties")
     private Properties kafkaProperties;
 
     //@Inject
-    private Logger logger = LoggerProducer.getLogger(getClass());
+    //private Logger logger = LoggerProducer.getLogger(getClass());
+    @Autowired
+    private Logger logger;
 
     @PostConstruct
     private void init() {

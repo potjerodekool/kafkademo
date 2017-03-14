@@ -4,9 +4,11 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.errors.WakeupException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 import static java.util.Arrays.asList;
@@ -17,12 +19,13 @@ import static java.util.Arrays.asList;
 public class EventConsumer implements Runnable {
 
     private final KafkaConsumer<String, CoffeeEvent> consumer;
-    private final java.util.function.Consumer<CoffeeEvent> eventConsumer;
+    private final Consumer<CoffeeEvent> eventConsumer;
     private final AtomicBoolean closed = new AtomicBoolean();
-    private Logger logger = LoggerProducer.getLogger(getClass());
+
+    private Logger logger = Logger.getLogger(getClass().getName());
 
     EventConsumer(final Properties kafkaProperties,
-                         final java.util.function.Consumer<CoffeeEvent> eventConsumer,
+                         final Consumer<CoffeeEvent> eventConsumer,
                          final String... topics) {
         this.eventConsumer = eventConsumer;
         consumer = new KafkaConsumer<>(kafkaProperties);
@@ -38,6 +41,7 @@ public class EventConsumer implements Runnable {
             }
         } catch (final WakeupException e) {
             // will wakeup for closing
+            logger.info(e.getMessage());
         } finally {
             consumer.close();
         }

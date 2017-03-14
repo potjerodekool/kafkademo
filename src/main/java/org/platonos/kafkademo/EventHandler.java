@@ -1,43 +1,41 @@
 package org.platonos.kafkademo;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationListener;
+import org.springframework.stereotype.Service;
+
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-import javax.enterprise.concurrent.ManagedExecutorService;
-import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
-import javax.inject.Inject;
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 /**
  * Created by Evert on 23-2-2017.
  */
-@Singleton
-@Startup
-public class EventHandler {
+@Service
+public class EventHandler implements ApplicationListener<CoffeeEvent> {
 
     private EventConsumer eventConsumer;
 
-    @Resource
-    ManagedExecutorService mes;
+    ExecutorService mes = Executors.newSingleThreadExecutor();
 
-    @Inject
+    @Qualifier("kafkaProperties")
+    @Autowired
     Properties kafkaProperties;
 
-    @Inject
-    Event<CoffeeEvent> events;
+    @Autowired
+    ApplicationEventPublisher events;
 
-    //@Inject
-    //BaristaCommandService baristaService;
+    @Autowired
+    private Logger logger;
 
-    //@Inject
-    private Logger logger = LoggerProducer.getLogger(getClass());
-
-    public void handle(@Observes CoffeeEvent event) {
+    @Override
+    public void onApplicationEvent(final CoffeeEvent event) {
         System.out.println("make coffee " + event.getName());
-        //baristaService.makeCoffee(event.getOrderInfo());
     }
 
     @PostConstruct
@@ -48,7 +46,7 @@ public class EventHandler {
 
         eventConsumer = new EventConsumer(kafkaProperties, ev -> {
             logger.info("firing = " + ev);
-            events.fire(ev);
+            events.publishEvent(ev);
         }, "test");
 
         mes.execute(eventConsumer);

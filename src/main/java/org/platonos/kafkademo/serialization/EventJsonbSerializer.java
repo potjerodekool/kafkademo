@@ -1,7 +1,6 @@
 package org.platonos.kafkademo.serialization;
 
 import org.platonos.kafkademo.CoffeeEvent;
-import org.platonos.kafkademo.LoggerProducer;
 
 import javax.json.bind.serializer.JsonbSerializer;
 import javax.json.bind.serializer.SerializationContext;
@@ -10,7 +9,7 @@ import java.util.logging.Logger;
 
 public class EventJsonbSerializer implements JsonbSerializer<CoffeeEvent> {
 
-    Logger logger = LoggerProducer.getLogger(getClass());
+    Logger logger = Logger.getLogger(EventJsonbSerializer.class.getName());
 
     @Override
     public void serialize(final CoffeeEvent event, final JsonGenerator generator, final SerializationContext ctx) {

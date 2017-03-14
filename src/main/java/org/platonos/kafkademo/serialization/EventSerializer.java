@@ -2,8 +2,7 @@ package org.platonos.kafkademo.serialization;
 
 import org.apache.kafka.common.serialization.Serializer;
 import org.platonos.kafkademo.CoffeeEvent;
-import org.platonos.kafkademo.LoggerProducer;
-import org.platonos.kafkademo.serialization.EventJsonbSerializer;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
@@ -14,7 +13,7 @@ import java.util.logging.Logger;
 
 public class EventSerializer implements Serializer<CoffeeEvent> {
 
-    Logger logger = LoggerProducer.getLogger(getClass());
+    Logger logger = Logger.getLogger(EventSerializer.class.getName());
 
     @Override
     public void configure(final Map<String, ?> configs, final boolean isKey) {
@@ -32,7 +31,7 @@ public class EventSerializer implements Serializer<CoffeeEvent> {
 
         try (final Jsonb jsonb = JsonbBuilder.create(config)) {
             return jsonb.toJson(event, CoffeeEvent.class).getBytes(StandardCharsets.UTF_8);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException(e);
         } finally {
             logger.info("serialize end");

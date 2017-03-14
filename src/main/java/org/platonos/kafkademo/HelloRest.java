@@ -4,22 +4,24 @@ package org.platonos.kafkademo;
  * Created by Evert on 17-2-2017.
  */
 
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import javax.ws.rs.core.MediaType;
-@Path("/coffee")
+
+@Controller
 public class HelloRest {
 
-    @Inject
+    @Autowired
     private EventProducer eventProducer;
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @RequestMapping(value = "/coffee", produces = MediaType.APPLICATION_JSON)
+    @ResponseBody
     public String hello() {
         eventProducer.publish(new CoffeeEvent("black"));
-        return "hello: wildfly swarm + gradle + java + Coffie";
+        return "hello: Spring Boot + gradle + java";
     }
 
 }
