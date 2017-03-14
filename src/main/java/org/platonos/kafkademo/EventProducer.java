@@ -22,8 +22,6 @@ public class EventProducer {
     @Qualifier("kafkaProperties")
     private Properties kafkaProperties;
 
-    //@Inject
-    //private Logger logger = LoggerProducer.getLogger(getClass());
     @Autowired
     private Logger logger;
 
